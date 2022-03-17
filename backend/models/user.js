@@ -19,6 +19,8 @@ const userModel = mongoose.Schema({
     default:
       "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
   },
+},{
+    timestamps : true
 });
 
 const userSchema = mongoose.model("userSchema", userModel);
