@@ -6,6 +6,7 @@ frontend/.pnp.js
 
 backend/node_modules
 
+
 # testing
 frontend/coverage
 
@@ -24,3 +25,4 @@ frontend/yarn-debug.log*
 frontend/yarn-error.log*
 
 frontend/.env
+backend/.env
