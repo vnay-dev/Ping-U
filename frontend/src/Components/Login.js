@@ -44,7 +44,7 @@ const Login = () => {
         email: formData.email,
         password: formData.password,
       };
-      const { data } = await axios.post("/auth/login", loginData, config);
+      const { data } = await axios.post("/users/login", loginData, config);
       if (data !== undefined) {
         localStorage.setItem("userInfo", JSON.stringify(data));
         toast({

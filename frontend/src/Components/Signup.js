@@ -64,7 +64,7 @@ const Signup = () => {
         password: formData.password,
         picture: formData.picture,
       };
-      const { data } = await axios.post("/auth/signup", signupData, config);
+      const { data } = await axios.post("/users/signup", signupData, config);
       toast({
         title: "Signup successful",
         status: "success",

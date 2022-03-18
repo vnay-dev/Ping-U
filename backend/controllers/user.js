@@ -45,7 +45,6 @@ const loginRoute = asyncHandler(async (req, res) => {
 
   const userExist = await User.findOne({ email });
   if (userExist && (await userExist.matchPasswords(password))) {
-    console.log(userExist)
     res.status(201).json({
       _id: userExist.id,
       name: userExist.name,
@@ -59,4 +58,19 @@ const loginRoute = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { signupRoute, loginRoute };
+const getAllUsers = asyncHandler(async (req, res) => {
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+  const allUsers = await User.find(keyword).find({
+    _id: { $ne: req.user._id },
+  });
+  res.send(allUsers);
+});
+
+module.exports = { signupRoute, loginRoute, getAllUsers };
