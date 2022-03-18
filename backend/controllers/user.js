@@ -57,7 +57,7 @@ const loginRoute = asyncHandler(async (req, res) => {
   }
 });
 
-const getAllUsers = asyncHandler(async (req, res) => {
+const fetchUsers = asyncHandler(async (req, res) => {
   const keyword = req.query.search
     ? {
         $or: [
@@ -72,4 +72,4 @@ const getAllUsers = asyncHandler(async (req, res) => {
   res.send(allUsers);
 });
 
-module.exports = { signupRoute, loginRoute, getAllUsers };
+module.exports = { signupRoute, loginRoute, fetchUsers };
