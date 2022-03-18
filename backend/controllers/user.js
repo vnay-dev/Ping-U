@@ -15,7 +15,6 @@ const signupRoute = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("User already exist");
   }
-
   const newUser = await User.create({
     name,
     email,
