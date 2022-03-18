@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const User = require("../models/user");
+const Users = require("../models/user");
 const generateToken = require("./generateToken");
 
 const signupRoute = asyncHandler(async (req, res) => {
@@ -10,12 +10,12 @@ const signupRoute = asyncHandler(async (req, res) => {
     throw new Error("Please fill all the fields");
   }
 
-  const userExist = await User.findOne({ email });
+  const userExist = await Users.findOne({ email });
   if (userExist) {
     res.status(400);
     throw new Error("User already exist");
   }
-  const newUser = await User.create({
+  const newUser = await Users.create({
     name,
     email,
     password,
@@ -41,8 +41,7 @@ const loginRoute = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Please fill all the fields");
   }
-
-  const userExist = await User.findOne({ email });
+  const userExist = await Users.findOne({ email });
   if (userExist && (await userExist.matchPasswords(password))) {
     res.status(201).json({
       _id: userExist.id,
@@ -66,7 +65,7 @@ const fetchUsers = asyncHandler(async (req, res) => {
         ],
       }
     : {};
-  const allUsers = await User.find(keyword).find({
+  const allUsers = await Users.find(keyword).find({
     _id: { $ne: req.user._id },
   });
   res.send(allUsers);

@@ -12,16 +12,16 @@ const chatModel = mongoose.Schema(
     users: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: "userSchema",
       },
     ],
     groupAdmin: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "userSchema",
     },
     latestMessage: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Message",
+      ref: "messageSchema",
     },
   },
   {
@@ -29,5 +29,5 @@ const chatModel = mongoose.Schema(
   }
 );
 
-const chatSchema = mongoose.model("chatSchema", chatModel);
-module.exports = chatSchema;
+const Chats = mongoose.model("chatSchema", chatModel);
+module.exports = Chats;
