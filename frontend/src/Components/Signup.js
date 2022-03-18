@@ -24,6 +24,69 @@ const Signup = () => {
   const toast = useToast();
   const navigate = useNavigate();
 
+  const handleSubmit = async () => {
+    setLoading(true);
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
+      toast({
+        title: "Please fill all the fields",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      toast({
+        title: "Passwords dont match",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    }
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+      let signupData = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        picture: formData.picture,
+      };
+      const { data } = await axios.post("/auth/signup", signupData, config);
+      toast({
+        title: "Signup successful",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      localStorage.setItem("user", JSON.stringify(data));
+      setLoading(false);
+      navigate("/chats");
+    } catch (err) {
+      toast({
+        title: err.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+    }
+  };
+
   const uploadPic = (pic) => {
     setLoading(true);
     if (pic === undefined) {
@@ -31,100 +94,39 @@ const Signup = () => {
         title: "Please select an image",
         status: "warning",
         duration: 5000,
-        position: "bottom",
         isClosable: true,
+        position: "bottom",
       });
-    } else if (pic.type === "image/png" || pic.type === "image/jpeg") {
-      const formInfo = new FormData();
-      formInfo.append("file", pic);
-      formInfo.append("upload_preset", "ping-u");
-      formInfo.append("cloud_name", process.env.REACT_APP_CLOUD_NAME);
-      fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`,
-        {
-          method: "post",
-          body: formInfo,
-        }
-      )
+      return;
+    }
+    if (pic.type === "image/png" || pic.type === "image/jpeg") {
+      const data = new FormData();
+      data.append("file", pic);
+      data.append("upload_preset", "ping-u");
+      data.append("cloud_name", "doj8wxtfa");
+      fetch("https://api.cloudinary.com/v1_1/doj8wxtfa/image/upload", {
+        method: "post",
+        body: data,
+      })
         .then((res) => res.json())
         .then((data) => {
-          setFormData({ ...formData, pic: data.url });
+          setFormData({ ...formData, picture: data.url.toString() });
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
         });
     } else {
       toast({
-        title: "Image type not supported",
-        status: "error",
+        title: "Image format not supported",
+        status: "warning",
         duration: 5000,
-        position: "bottom",
         isClosable: true,
+        position: "bottom",
       });
     }
-    setLoading(false);
   };
-
-  const handleSubmit = async () => {
-    setLoading(true);
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.password ||
-      !formData.pic
-    ) {
-      toast({
-        title: "Please fill all the fields",
-        status: "error",
-        duration: 5000,
-        position: "bottom",
-        isClosable: true,
-      });
-    } else if (formData.password !== formData.confirmPassword) {
-      toast({
-        title: "Passwords don't match",
-        status: "error",
-        duration: 5000,
-        position: "bottom",
-        isClosable: true,
-      });
-    } else {
-      try {
-        let config = {
-          headers: {
-            "Content-type": "application/json",
-          },
-        };
-        let signupData = {
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          pic: formData.pic,
-        };
-        const { data } = await axios.post("api/signup", signupData, config);
-        if (data !== undefined) {
-          localStorage.setItem("userInfo", JSON.stringify(data));
-          toast({
-            title: "Signup successful",
-            status: "success",
-            duration: 5000,
-            position: "bottom",
-            isClosable: true,
-          });
-          navigate("/chats");
-        }
-      } catch (error) {
-        toast({
-          title: "Signup failed",
-          description: error.response.data.message,
-          status: "error",
-          duration: 5000,
-          position: "bottom",
-          isClosable: true,
-        });
-      }
-    }
-    setLoading(false);
-    return;
-  };
-
   return (
     <VStack spacing={"0.8em"}>
       <FormControl>

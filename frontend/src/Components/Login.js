@@ -31,42 +31,41 @@ const Login = () => {
         position: "bottom",
         isClosable: true,
       });
-    } else {
-      try {
-        let config = {
-          headers: {
-            "Content-type": "application/json",
-          },
-        };
-        let signupData = {
-          email: formData.email,
-          password: formData.password,
-        };
-        const { data } = await axios.post("api/login", signupData, config);
-        if (data !== undefined) {
-          localStorage.setItem("userInfo", JSON.stringify(data));
-          toast({
-            title: "Login successful",
-            status: "success",
-            duration: 5000,
-            position: "bottom",
-            isClosable: true,
-          });
-          navigate("/chats");
-        }
-      } catch (error) {
+      setLoading(false);
+      return;
+    }
+    try {
+      let config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+      let loginData = {
+        email: formData.email,
+        password: formData.password,
+      };
+      const { data } = await axios.post("/auth/login", loginData, config);
+      if (data !== undefined) {
+        localStorage.setItem("userInfo", JSON.stringify(data));
         toast({
-          title: "Login failed",
-          description: error.response.data.message,
-          status: "error",
+          title: "Login successful",
+          status: "success",
           duration: 5000,
           position: "bottom",
           isClosable: true,
         });
+        navigate("/chats");
       }
+    } catch (error) {
+      toast({
+        title: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        position: "bottom",
+        isClosable: true,
+      });
+      setLoading(false);
     }
-    setLoading(false);
-    return;
   };
 
   return (

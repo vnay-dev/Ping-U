@@ -1,10 +1,11 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/user");
+const generateToken = require("./generateToken");
 
 const signupRoute = asyncHandler(async (req, res) => {
-  const { name, email, password, pic } = req.body;
+  const { name, email, password, picture } = req.body;
 
-  if (!name || !email || !password || !pic) {
+  if (!name || !email || !password) {
     res.status(400);
     throw new Error("Please fill all the fields");
   }
@@ -19,14 +20,14 @@ const signupRoute = asyncHandler(async (req, res) => {
     name,
     email,
     password,
-    pic,
+    picture,
   });
 
   if (newUser) {
     res.status(201).json({
       _id: newUser.id,
       email: newUser.email,
-      pic: newUser.pic,
+      picture: newUser.pic,
       token: generateToken(newUser._id),
     });
   } else {
@@ -44,11 +45,12 @@ const loginRoute = asyncHandler(async (req, res) => {
 
   const userExist = await User.findOne({ email });
   if (userExist && (await userExist.matchPasswords(password))) {
+    console.log(userExist)
     res.status(201).json({
       _id: userExist.id,
       name: userExist.name,
       email: userExist.email,
-      pic: userExist.pic,
+      picture: userExist.picture,
       token: generateToken(userExist._id),
     });
   } else {
