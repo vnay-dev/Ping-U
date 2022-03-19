@@ -19,6 +19,7 @@ import {
   Input,
   DrawerFooter,
   useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { ChatState } from "../../Context/ChatProvider";
@@ -35,7 +36,7 @@ const SideDrawer = () => {
   const [search, setSearch] = useState();
   const [loadingChat, setLoadingChat] = useState();
 
-  const { user } = ChatState();
+  const { user, setSelectedChat, allChats, setAllChats } = ChatState();
   const navigate = useNavigate();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -70,6 +71,34 @@ const SideDrawer = () => {
       toast({
         title: "Error occured",
         description: "Failed to load search results",
+        duration: 5000,
+        isClosable: true,
+        status: "error",
+        position: "bottom-left",
+      });
+    }
+  };
+
+  const showChatHandler = async (userId) => {
+    try {
+      setLoadingChat(true);
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.post("/chats", { userId }, config);
+      if (!allChats.find((item) => item._id === data._id)) {
+        setAllChats([data, ...allChats]);
+      }
+      setSelectedChat(data);
+      setLoadingChat(false);
+      onClose();
+    } catch (error) {
+      toast({
+        title: "Error occured",
+        description: "Failed to fetch chats bro",
         duration: 5000,
         isClosable: true,
         status: "error",
@@ -138,7 +167,7 @@ const SideDrawer = () => {
             <Box d="flex">
               <Input
                 placeholder="Search by Email or Name..."
-                value={search}
+                value={search || ""}
                 onChange={(e) => setSearch(e.target.value)}
               />
               <Button mx={2} onClick={handleSearch}>
@@ -153,11 +182,12 @@ const SideDrawer = () => {
                   <UserListItem
                     key={item._id}
                     user={item}
-                    //onClick={() => showChatHandler(item._id)}
+                    onClick={() => showChatHandler(item._id)}
                   />
                 );
               })
             )}
+            {loadingChat && <Spinner ml={"auto"} d="flex" />}
           </DrawerBody>
         </DrawerContent>
       </Drawer>
