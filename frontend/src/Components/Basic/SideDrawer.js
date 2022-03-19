@@ -25,6 +25,9 @@ import { ChatState } from "../../Context/ChatProvider";
 import ProfileModal from "../ProfileModal";
 import { useNavigate } from "react-router-dom";
 import { useDisclosure } from "@chakra-ui/hooks";
+import axios from "axios";
+import ChatLoader from "./ChatLoader";
+import UserListItem from "../UserListItem";
 
 const SideDrawer = () => {
   const [loading, setLoading] = useState(false);
@@ -42,7 +45,7 @@ const SideDrawer = () => {
     navigate("/");
   };
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!search) {
       toast({
         title: "Search field empty",
@@ -51,7 +54,27 @@ const SideDrawer = () => {
         status: "warning",
         position: "top-left",
       });
-      return
+      return;
+    }
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.get(`/users/fetch?search=${search}`, config);
+      setLoading(false);
+      setSearchResults(data);
+    } catch (error) {
+      toast({
+        title: "Error occured",
+        description: "Failed to load search results",
+        duration: 5000,
+        isClosable: true,
+        status: "error",
+        position: "bottom-left",
+      });
     }
   };
 
@@ -122,6 +145,19 @@ const SideDrawer = () => {
                 Go
               </Button>
             </Box>
+            {loading ? (
+              <ChatLoader />
+            ) : (
+              searchResults?.map((item) => {
+                return (
+                  <UserListItem
+                    key={item._id}
+                    user={item}
+                    //onClick={() => showChatHandler(item._id)}
+                  />
+                );
+              })
+            )}
           </DrawerBody>
         </DrawerContent>
       </Drawer>
