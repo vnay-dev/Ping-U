@@ -9,10 +9,6 @@ import UpdateGroupChatModal from "./UpdateGroupChatModal";
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { user, setSelectedChat, selectedChat } = ChatState();
 
-  useEffect(() => {
-    console.log(fetchAgain);
-  }, [fetchAgain]);
-
   return (
     <>
       {selectedChat ? (

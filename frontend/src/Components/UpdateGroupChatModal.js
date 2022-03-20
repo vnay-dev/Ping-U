@@ -12,6 +12,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -19,6 +20,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { ChatState } from "../Context/ChatProvider";
 import UserBadge from "./UserBadge";
+import UserListItem from "./UserListItem";
 
 const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -32,7 +34,95 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
 
   const [renameLoading, setRenameLoading] = useState(false);
 
-  const handleRemove = () => {};
+  const handleRemove = async (member) => {
+    if (selectedChat.groupAdmin._id !== user._id && member._id !== user._id) {
+      toast({
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+        title: "Non admins cannot remove members",
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.put(
+        "/chats/group/remove",
+        {
+          chatId: selectedChat._id,
+          userId: member._id,
+        },
+        config
+      );
+      user._id === member._id ? setSelectedChat() : setSelectedChat(data);
+      setFetchAgain(!fetchAgain);
+      setLoading(false);
+    } catch (error) {
+      toast({
+        title: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+    }
+  };
+  const handleAddUser = async (member) => {
+    if (selectedChat.users.find((item) => item._id === member._id)) {
+      toast({
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+        title: "Member already present",
+      });
+      return;
+    }
+    if (selectedChat.groupAdmin._id !== user._id) {
+      toast({
+        title: "Non admins cannot add members",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+        status: "warning",
+      });
+      return;
+    }
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.put(
+        "/chats/group/add",
+        {
+          chatId: selectedChat._id,
+          userId: member._id,
+        },
+        config
+      );
+      setSelectedChat(data);
+      setFetchAgain(!fetchAgain);
+      setLoading(false);
+    } catch (error) {
+      toast({
+        title: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+    }
+  };
   const handleRename = async () => {
     if (!groupName) return;
     try {
@@ -65,7 +155,32 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
     }
     setGroupName("");
   };
-  const handleSearch = () => {};
+  const handleSearch = async (query) => {
+    if (!query) {
+      return;
+    }
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.get(`/users/fetch?search=${query}`, config);
+      setLoading(false);
+      setSearchResults(data);
+    } catch (error) {
+      toast({
+        title: "Error occured",
+        description: "Failed to load search results",
+        duration: 5000,
+        isClosable: true,
+        status: "error",
+        position: "bottom-left",
+      });
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -106,6 +221,19 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
                 onChange={(e) => handleSearch(e.target.value)}
               />
             </FormControl>
+            {loading ? (
+              <Spinner />
+            ) : (
+              searchResults.slice(0, 4)?.map((item) => {
+                return (
+                  <UserListItem
+                    key={item._id}
+                    user={item}
+                    onClick={() => handleAddUser(item)}
+                  />
+                );
+              })
+            )}
           </ModalBody>
 
           <ModalFooter>
