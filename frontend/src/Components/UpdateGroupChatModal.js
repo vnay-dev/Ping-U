@@ -15,13 +15,14 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { ChatState } from "../Context/ChatProvider";
 import UserBadge from "./UserBadge";
 
 const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { user, selectedChat } = ChatState();
+  const { user, selectedChat, setSelectedChat } = ChatState();
   const toast = useToast();
 
   const [loading, setLoading] = useState(false);
@@ -32,7 +33,38 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
   const [renameLoading, setRenameLoading] = useState(false);
 
   const handleRemove = () => {};
-  const handleRename = () => {};
+  const handleRename = async () => {
+    if (!groupName) return;
+    try {
+      setRenameLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.put(
+        "/chats/group/rename",
+        {
+          chatId: selectedChat._id,
+          chatName: groupName,
+        },
+        config
+      );
+      setSelectedChat(data);
+      setFetchAgain(!fetchAgain);
+      setRenameLoading(false);
+    } catch (error) {
+      toast({
+        status: "error",
+        title: error,
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setRenameLoading(false);
+    }
+    setGroupName("");
+  };
   const handleSearch = () => {};
 
   return (
@@ -50,14 +82,18 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
             <Box w={"100%"} d="flex" flex={"wrap"}>
               {selectedChat.users.map((item) => {
                 return (
-                  <UserBadge user={item} onClick={() => handleRemove(item)} />
+                  <UserBadge
+                    key={item._id}
+                    user={item}
+                    onClick={() => handleRemove(item)}
+                  />
                 );
               })}
             </Box>
             <FormControl display={"flex"}>
               <Input
                 placeholder="Chat name"
-                value={groupName}
+                value={groupName || ""}
                 onChange={(e) => setGroupName(e.target.value)}
               />
               <Button isLoading={renameLoading} onClick={handleRename}>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChatState } from "../Context/ChatProvider";
 import { Box } from "@chakra-ui/react";
 import SideDrawer from "../Components/Basic/SideDrawer";
@@ -7,7 +7,8 @@ import ChatRoom from "../Components/Chats/ChatRoom";
 
 const Chats = () => {
   const { user } = ChatState();
-  const [fecthAgain, setFetchAgain] = useState();
+  const [fetchAgain, setFetchAgain] = useState(false);
+
   return (
     <div style={{ width: "100%" }}>
       {user && <SideDrawer />}
@@ -17,9 +18,9 @@ const Chats = () => {
         justifyContent={"space-between"}
         padding={3}
       >
-        {user && <MyChats fecthAgain={fecthAgain} />}
+        {user && <MyChats fetchAgain={fetchAgain} />}
         {user && (
-          <ChatRoom fecthAgain={fecthAgain} setFetchAgain={setFetchAgain} />
+          <ChatRoom fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
         )}
       </Box>
     </div>
