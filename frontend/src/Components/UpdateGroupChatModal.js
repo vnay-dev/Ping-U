@@ -22,7 +22,7 @@ import { ChatState } from "../Context/ChatProvider";
 import UserBadge from "./UserBadge";
 import UserListItem from "./UserListItem";
 
-const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
+const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, selectedChat, setSelectedChat } = ChatState();
   const toast = useToast();
@@ -63,6 +63,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
       );
       user._id === member._id ? setSelectedChat() : setSelectedChat(data);
       setFetchAgain(!fetchAgain);
+      fetchMessages()
       setLoading(false);
     } catch (error) {
       toast({
@@ -74,6 +75,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
       });
     }
   };
+
   const handleAddUser = async (member) => {
     if (selectedChat.users.find((item) => item._id === member._id)) {
       toast({
@@ -123,6 +125,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
       });
     }
   };
+
   const handleRename = async () => {
     if (!groupName) return;
     try {
@@ -155,6 +158,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
     }
     setGroupName("");
   };
+
   const handleSearch = async (query) => {
     if (!query) {
       return;

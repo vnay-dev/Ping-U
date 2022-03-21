@@ -13,6 +13,7 @@ import React, { useEffect, useState } from "react";
 import { getFullSenderData, getSender } from "../config/chatConfig";
 import { ChatState } from "../Context/ChatProvider";
 import ProfileModal from "./ProfileModal";
+import ScrollableChat from "./ScrollableChat";
 import UpdateGroupChatModal from "./UpdateGroupChatModal";
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -55,9 +56,36 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       }
     }
   };
+
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
   };
+  const fetchMessages = async () => {
+    if (!selectedChat) return;
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      setLoading(true);
+      const { data } = await axios.get(`/messages/${selectedChat._id}`, config);
+      setMessages(data);
+      setLoading(false);
+    } catch (error) {
+      toast({
+        title: "Failed to load messages",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchMessages();
+  }, [selectedChat]);
 
   return (
     <>
@@ -80,6 +108,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <UpdateGroupChatModal
                   fetchAgain={fetchAgain}
                   setFetchAgain={setFetchAgain}
+                  fetchMessages={fetchMessages}
                 />
               </>
             ) : (
@@ -100,7 +129,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             h="100%"
             overflowY={"hidden"}
           >
-            {loading ? <Spinner /> : <div></div>}
+            {loading ? (
+              <Spinner />
+            ) : (
+              <Box d="flex" overflowY={"scroll"} flexDir="column">
+                <ScrollableChat messages={messages} />
+              </Box>
+            )}
             <FormControl onKeyDown={sendMessage} isRequired mb={1}>
               <Input
                 value={newMessage}
