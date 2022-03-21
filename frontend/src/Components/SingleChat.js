@@ -1,6 +1,15 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { Box, IconButton, Text } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import {
+  Box,
+  FormControl,
+  IconButton,
+  Input,
+  Spinner,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { getFullSenderData, getSender } from "../config/chatConfig";
 import { ChatState } from "../Context/ChatProvider";
 import ProfileModal from "./ProfileModal";
@@ -8,6 +17,47 @@ import UpdateGroupChatModal from "./UpdateGroupChatModal";
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { user, setSelectedChat, selectedChat } = ChatState();
+
+  const [loading, setLoading] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+
+  const toast = useToast();
+
+  const sendMessage = async (event) => {
+    if (event.key === "Enter" && newMessage) {
+      try {
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
+        setNewMessage("");
+        const { data } = await axios.post(
+          "/messages",
+          {
+            content: newMessage,
+            chatId: selectedChat._id,
+          },
+          config
+        );
+        console.log(data);
+        setMessages([...messages, data]);
+      } catch (error) {
+        toast({
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+          title: "Failed to send message",
+        });
+      }
+    }
+  };
+  const typingHandler = (e) => {
+    setNewMessage(e.target.value);
+  };
 
   return (
     <>
@@ -44,11 +94,22 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           <Box
             d="flex"
             justifyContent={"flex-end"}
+            alignItems="flex-end"
             bg="#E8E8E8"
             w="100%"
             h="100%"
             overflowY={"hidden"}
-          ></Box>
+          >
+            {loading ? <Spinner /> : <div></div>}
+            <FormControl onKeyDown={sendMessage} isRequired mb={1}>
+              <Input
+                value={newMessage}
+                placeholder="Enter a message"
+                onChange={typingHandler}
+                bg="white"
+              />
+            </FormControl>
+          </Box>
         </>
       ) : (
         <Box d="flex" alignItems={"center"} justifyContent="center" h="100%">
