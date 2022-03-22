@@ -6,7 +6,7 @@ const ChatContext = createContext();
 const ChatProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [selectedChat, setSelectedChat] = useState();
-  const [allChats, setAllChats] = useState([]);
+  const [allChats, setAllChats] = useState();
 
   const navigate = useNavigate();
 

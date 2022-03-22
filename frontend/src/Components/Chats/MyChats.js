@@ -24,7 +24,6 @@ const MyChats = ({ fetchAgain }) => {
       const { data } = await axios.get("/chats/fetch", config);
       setAllChats(data);
     } catch (error) {
-      console.log(error);
       toast({
         title: "Error occured",
         description: "Failed to fetch chats from my chats",
@@ -77,10 +76,11 @@ const MyChats = ({ fetchAgain }) => {
         w="100%"
         overflowY={"hidden"}
         bg="#F8F8F8"
+        borderRadius="lg"
       >
         {allChats ? (
           <Stack overflowY={"scroll"}>
-            {allChats.map((item) => {
+            {allChats?.map((item) => {
               return (
                 <Box
                   onClick={() => setSelectedChat(item)}
@@ -99,7 +99,14 @@ const MyChats = ({ fetchAgain }) => {
             })}
           </Stack>
         ) : (
-          <ChatLoader />
+          <Text
+            fontFamily={"Work sans"}
+            d="flex"
+            justifyContent={"space-around"}
+            alignItems="flex-start"
+          >
+            Chat list is empty!
+          </Text>
         )}
       </Box>
     </Box>

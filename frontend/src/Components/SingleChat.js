@@ -43,7 +43,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
           config
         );
-        console.log(data);
         setMessages([...messages, data]);
       } catch (error) {
         toast({
@@ -122,8 +121,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           </Text>
           <Box
             d="flex"
-            justifyContent={"flex-end"}
-            alignItems="flex-end"
+            flexDir="column"
+            justifyContent="flex-end"
             bg="#E8E8E8"
             w="100%"
             h="100%"
@@ -136,7 +135,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <ScrollableChat messages={messages} />
               </Box>
             )}
-            <FormControl onKeyDown={sendMessage} isRequired mb={1}>
+            <FormControl onKeyDown={sendMessage} isRequired>
               <Input
                 value={newMessage}
                 placeholder="Enter a message"

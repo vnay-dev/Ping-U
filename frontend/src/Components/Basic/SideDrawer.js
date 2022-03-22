@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -89,7 +89,7 @@ const SideDrawer = () => {
         },
       };
       const { data } = await axios.post("/chats", { userId }, config);
-      if (!allChats.find((item) => item._id === data._id)) {
+      if (!allChats?.find((item) => item._id === data._id)) {
         setAllChats([data, ...allChats]);
       }
       setSelectedChat(data);
@@ -98,7 +98,7 @@ const SideDrawer = () => {
     } catch (error) {
       toast({
         title: "Error occured",
-        description: "Failed to fetch chats bro",
+        description: error,
         duration: 5000,
         isClosable: true,
         status: "error",

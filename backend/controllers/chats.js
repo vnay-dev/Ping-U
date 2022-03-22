@@ -60,7 +60,7 @@ const fetchChats = asyncHandler(async (req, res) => {
           path: "latestMessage.sender",
           select: "name picture email",
         });
-        res.send(results);
+        res.status(200).send(results);
       }); // sort from new to old
   } catch (error) {
     res.status(400);

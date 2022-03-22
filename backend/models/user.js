@@ -18,8 +18,7 @@ const userModel = mongoose.Schema(
     },
     picture: {
       type: String,
-      default:
-        "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+      required: true,
     },
   },
   {
@@ -27,7 +26,7 @@ const userModel = mongoose.Schema(
   }
 );
 
-userModel.methods.matchPasswords = async function(enteredPwd) {
+userModel.methods.matchPasswords = async function (enteredPwd) {
   return await bcrypt.compare(enteredPwd, this.password);
 };
 
@@ -39,5 +38,5 @@ userModel.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-const Users = mongoose.model("userSchema", userModel);
+const Users = mongoose.model("users", userModel);
 module.exports = Users;

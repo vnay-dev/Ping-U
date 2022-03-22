@@ -3,7 +3,7 @@ const Users = require("../models/user");
 const generateToken = require("./generateToken");
 
 const signupRoute = asyncHandler(async (req, res) => {
-  const { name, email, password, picture } = req.body;
+  let { name, email, password, picture } = req.body;
 
   if (!name || !email || !password) {
     res.status(400);
@@ -15,6 +15,11 @@ const signupRoute = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("User already exist");
   }
+
+  if (picture === "") {
+    picture = process.env.DEFAULT_PIC;
+  }
+
   const newUser = await Users.create({
     name,
     email,
@@ -26,7 +31,7 @@ const signupRoute = asyncHandler(async (req, res) => {
     res.status(201).json({
       _id: newUser.id,
       email: newUser.email,
-      picture: newUser.pic,
+      picture: newUser.picture,
       token: generateToken(newUser._id),
     });
   } else {
