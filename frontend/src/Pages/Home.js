@@ -9,8 +9,8 @@ import {
   Box,
   Text,
 } from "@chakra-ui/react";
-import Login from "../Components/Auth/Login";
-import Signup from "../Components/Auth/Signup";
+import Login from "../components/auth/Login";
+import Signup from "../components/auth/Signup";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {

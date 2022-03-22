@@ -17,10 +17,10 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { ChatState } from "../Context/ChatProvider";
-import UserBadge from "./UserBadge";
-import UserListItem from "./UserListItem";
+import React, { useState } from "react";
+import { ChatState } from "../../context/ChatProvider";
+import UserBadge from "../user/UserBadge";
+import UserListItem from "../user/UserListItem";
 
 const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();

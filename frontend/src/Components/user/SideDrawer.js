@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Avatar,
   Box,
@@ -17,18 +17,17 @@ import {
   DrawerHeader,
   DrawerBody,
   Input,
-  DrawerFooter,
   useToast,
   Spinner,
 } from "@chakra-ui/react";
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import { ChatState } from "../../Context/ChatProvider";
-import ProfileModal from "../ProfileModal";
+import { ChatState } from "../../context/ChatProvider";
+import ProfileModal from "../modals/Profile";
 import { useNavigate } from "react-router-dom";
 import { useDisclosure } from "@chakra-ui/hooks";
 import axios from "axios";
-import ChatLoader from "./ChatLoader";
-import UserListItem from "../UserListItem";
+import ChatLoader from "../chats/widgets/ChatLoader";
+import UserListItem from "./UserListItem";
 
 const SideDrawer = () => {
   const [loading, setLoading] = useState(false);

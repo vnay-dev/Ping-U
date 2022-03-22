@@ -10,14 +10,14 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { getFullSenderData, getSender } from "../config/chatConfig";
-import { ChatState } from "../Context/ChatProvider";
-import ProfileModal from "./ProfileModal";
-import ScrollableChat from "./ScrollableChat";
-import UpdateGroupChatModal from "./UpdateGroupChatModal";
+import { getFullSenderData, getSender } from "../../utils/utils";
+import { ChatState } from "../../context/ChatProvider";
+import ProfileModal from "../modals/Profile";
+import ScrollableChat from "../chats/ScrollableChat";
+import UpdateGroupChatModal from "../modals/UpdateGroupChat";
 import io from "socket.io-client";
 import Lottie from "react-lottie";
-import animationData from "../animation/typing.json";
+import animationData from "../chats/widgets/animation/typing.json";
 
 const ENDPOINT = "http://localhost:5000";
 var socket, selectedChatCompare;

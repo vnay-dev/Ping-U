@@ -2,10 +2,9 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Box, Button, Stack, Text, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { getSender } from "../../config/chatConfig";
-import { ChatState } from "../../Context/ChatProvider";
-import ChatLoader from "../Basic/ChatLoader";
-import GroupChatModal from "../GroupChatModal";
+import { getSender } from "../../utils/utils";
+import { ChatState } from "../../context/ChatProvider";
+import GroupChatModal from "../modals/GroupChat";
 
 const MyChats = ({ fetchAgain }) => {
   const { user, selectedChat, setSelectedChat, allChats, setAllChats } =
