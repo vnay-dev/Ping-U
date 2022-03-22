@@ -26,23 +26,24 @@ const Home = () => {
 
   return (
     <Container maxW={"xl"} centerContent>
-      <Box
-        bg={"white"}
-        width="100%"
-        p={3}
-        textAlign={"center"}
-        borderRadius={4}
-        margin="1.5em"
+      <Text
+        fontFamily={"Work sans"}
+        fontSize={"4xl"}
+        color={"#515365"}
+        fontWeight={500}
+        marginY={"0.8em"}
       >
-        <Text fontFamily={"Work sans"} fontSize={"2xl"}>
-          Ping-U
-        </Text>
-      </Box>
-      <Box bg={"white"} borderRadius={4} p={4} width="100%">
-        <Tabs variant="soft-rounded" colorScheme="green">
-          <TabList>
-            <Tab width={"50%"}>Login</Tab>
-            <Tab width={"50%"}>Signup</Tab>
+        Ping-U
+      </Text>
+      <Box bg={"transparent"} borderRadius={"1em"} width="100%">
+        <Tabs variant="line" colorScheme="whatsapp">
+          <TabList mb="2em">
+            <Tab width={"50%"} style={{ boxShadow: "none" }}>
+              Login
+            </Tab>
+            <Tab width={"50%"} style={{ boxShadow: "none" }}>
+              Signup
+            </Tab>
           </TabList>
           <TabPanels>
             <TabPanel>

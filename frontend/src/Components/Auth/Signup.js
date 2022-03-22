@@ -133,6 +133,8 @@ const Signup = () => {
         <Input
           type="name"
           placeholder="Name"
+          borderColor={"#d6d6d6"}
+          _focus={{ boxShadow: "none" }}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
         />
       </FormControl>
@@ -140,6 +142,8 @@ const Signup = () => {
         <Input
           type="email"
           placeholder="Email"
+          borderColor={"#d6d6d6"}
+          _focus={{ boxShadow: "none" }}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         />
       </FormControl>
@@ -147,6 +151,8 @@ const Signup = () => {
         <Input
           type={showPassword ? "text" : "password"}
           placeholder="Password"
+          borderColor={"#d6d6d6"}
+          _focus={{ boxShadow: "none" }}
           onChange={(e) =>
             setFormData({ ...formData, password: e.target.value })
           }
@@ -155,6 +161,7 @@ const Signup = () => {
           <Button
             size={"sm"}
             margin="0.25em"
+            _focus={{ boxShadow: "none" }}
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? "Show" : "Hide"}
@@ -165,6 +172,8 @@ const Signup = () => {
         <Input
           type={showPassword ? "text" : "password"}
           placeholder="Confirm Password"
+          borderColor={"#d6d6d6"}
+          _focus={{ boxShadow: "none" }}
           onChange={(e) =>
             setFormData({ ...formData, confirmPassword: e.target.value })
           }
@@ -173,6 +182,7 @@ const Signup = () => {
           <Button
             size={"sm"}
             margin="0.25em"
+            _focus={{ boxShadow: "none" }}
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? "Show" : "Hide"}
@@ -180,8 +190,10 @@ const Signup = () => {
         </InputRightElement>
       </FormControl>
       <FormControl>
-        <FormLabel>Upload picture</FormLabel>
+        <FormLabel fontWeight={"normal"}>Upload picture</FormLabel>
         <Input
+          borderColor={"#d6d6d6"}
+          _focus={{ boxShadow: "none" }}
           type={"file"}
           p={1}
           accept={"image/*"}
@@ -191,8 +203,11 @@ const Signup = () => {
       <Button
         type="submit"
         variant={"solid"}
-        colorScheme={"gray"}
+        color="white"
+        bg="whatsapp.400"
         width="100%"
+        _hover={{ background: "#00c76d" }}
+        _focus={{boxShadow:"none"}}
         onClick={handleSubmit}
         isLoading={loading}
       >

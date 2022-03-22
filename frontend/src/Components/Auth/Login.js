@@ -75,6 +75,8 @@ const Login = () => {
           value={formData.email}
           type="email"
           placeholder="Email"
+          borderColor={"#d6d6d6"}
+          _focus={{ boxShadow: "none" }}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         />
       </FormControl>
@@ -82,7 +84,9 @@ const Login = () => {
         <Input
           type={showPassword ? "text" : "password"}
           value={formData.password}
+          borderColor={"#d6d6d6"}
           placeholder="Password"
+          _focus={{ boxShadow: "none" }}
           onChange={(e) =>
             setFormData({ ...formData, password: e.target.value })
           }
@@ -91,6 +95,7 @@ const Login = () => {
           <Button
             size={"sm"}
             margin="0.25em"
+            _focus={{ boxShadow: "none" }}
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? "Show" : "Hide"}
@@ -100,7 +105,10 @@ const Login = () => {
       <Button
         type="submit"
         variant={"solid"}
-        colorScheme={"gray"}
+        _focus={{ boxShadow: "none" }}
+        _hover={{ background: "#00c76d" }}
+        color="white"
+        bg="whatsapp.400"
         width="100%"
         isLoading={loading}
         onClick={handleSubmit}
@@ -109,9 +117,11 @@ const Login = () => {
       </Button>
       <Button
         type="submit"
-        variant={"solid"}
-        colorScheme={"red"}
+        _focus={{ boxShadow: "none" }}
+        variant={"outline"}
+        style={{ border: "1px solid #04c970" }}
         width="100%"
+        _hover={{ color: "white", background: "#179947" }}
         onClick={() => {
           setFormData({
             ...formData,
