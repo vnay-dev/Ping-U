@@ -48,6 +48,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
           config
         );
+        socket.emit("new message", data);
         setMessages([...messages, data]);
       } catch (error) {
         toast({
@@ -77,7 +78,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       const { data } = await axios.get(`/messages/${selectedChat._id}`, config);
       setMessages(data);
       setLoading(false);
-      socket.emit("join chat", selectedChat._id)
+      socket.emit("join chat", selectedChat._id);
     } catch (error) {
       toast({
         title: "Failed to load messages",
@@ -90,14 +91,29 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   useEffect(() => {
-    fetchMessages();
-  }, [selectedChat]);
-
-  useEffect(() => {
     socket = io(ENDPOINT);
     socket.emit("setup", user);
     socket.on("connection", () => setSocketConnected(true));
   }, []);
+
+  useEffect(() => {
+    fetchMessages();
+    selectedChatCompare = selectedChat;
+  }, [selectedChat]);
+
+  useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      console.log(newMessageRecieved)
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageRecieved.chats._id
+      ) {
+        // give notification
+      } else {
+        setMessages([...messages, newMessageRecieved]);
+      }
+    });
+  });
 
   return (
     <>
