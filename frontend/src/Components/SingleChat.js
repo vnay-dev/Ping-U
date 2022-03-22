@@ -77,6 +77,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       const { data } = await axios.get(`/messages/${selectedChat._id}`, config);
       setMessages(data);
       setLoading(false);
+      socket.emit("join chat", selectedChat._id)
     } catch (error) {
       toast({
         title: "Failed to load messages",
