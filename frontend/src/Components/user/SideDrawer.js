@@ -28,6 +28,8 @@ import { useDisclosure } from "@chakra-ui/hooks";
 import axios from "axios";
 import ChatLoader from "../chats/widgets/ChatLoader";
 import UserListItem from "./UserListItem";
+import { getSender } from "../../utils/utils";
+import NotifcationBadge, { Effect } from "react-notification-badge";
 
 const SideDrawer = () => {
   const [loading, setLoading] = useState(false);
@@ -35,7 +37,14 @@ const SideDrawer = () => {
   const [search, setSearch] = useState();
   const [loadingChat, setLoadingChat] = useState();
 
-  const { user, setSelectedChat, allChats, setAllChats } = ChatState();
+  const {
+    user,
+    setSelectedChat,
+    allChats,
+    setAllChats,
+    notifications,
+    setNotifications,
+  } = ChatState();
   const navigate = useNavigate();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -134,8 +143,28 @@ const SideDrawer = () => {
         <div>
           <Menu>
             <MenuButton p={1}>
+              <NotifcationBadge
+                count={notifications.length}
+                effect={Effect.SCALE}
+              />
               <BellIcon fontSize={"2xl"} marginX={5} />
             </MenuButton>
+            <MenuList>
+              {!notifications.length && "No new messages"}
+              {notifications.map((item) => (
+                <MenuItem
+                  key={item._id}
+                  onClick={() => {
+                    setSelectedChat(item.chats);
+                    setNotifications(notifications.filter((x) => x !== item));
+                  }}
+                >
+                  {item.chats.isGroupChat
+                    ? `New message in ${item.chats.chatName}`
+                    : `New message from ${getSender(user, item.chats.users)}`}
+                </MenuItem>
+              ))}
+            </MenuList>
           </Menu>
           <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
