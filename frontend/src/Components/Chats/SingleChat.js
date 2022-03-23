@@ -164,6 +164,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             d="flex"
             justifyContent={{ base: "space-between" }}
             alignItems="center"
+            padding={"0.5em 1em"}
           >
             <IconButton
               d={{ base: "flex", md: "none" }}
@@ -196,6 +197,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             w="100%"
             h="100%"
             overflowY={"hidden"}
+            p={2}
           >
             {loading ? (
               <Spinner />
@@ -219,6 +221,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 placeholder="Enter a message"
                 onChange={typingHandler}
                 bg="white"
+                marginTop={"1em"}
               />
             </FormControl>
           </Box>

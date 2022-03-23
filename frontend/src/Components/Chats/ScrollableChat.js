@@ -16,7 +16,7 @@ const ScrollableChat = ({ messages }) => {
     <ScrollableFeed>
       {messages &&
         messages.map((item, index) => (
-          <div style={{ display: "flex" }} key={item._id}>
+          <div style={{ display: "flex", alignItems:"center" }} key={item._id}>
             {(isSameSender(messages, item, index, user._id) ||
               isLastMessage(messages, index, user._id)) && (
               <Tooltip
@@ -25,8 +25,7 @@ const ScrollableChat = ({ messages }) => {
                 hasArrow
               >
                 <Avatar
-                  mt="7px"
-                  mr={1}
+                  m={3}
                   size={"sm"}
                   cursor="pointer"
                   name={item.sender.name}

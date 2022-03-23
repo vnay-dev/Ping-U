@@ -1,8 +1,8 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Box, Button, Stack, Text, useToast } from "@chakra-ui/react";
+import { Avatar, Box, Button, Stack, Text, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { getSender } from "../../utils/utils";
+import { getFullSenderData, getSender } from "../../utils/utils";
 import { ChatState } from "../../context/ChatProvider";
 import GroupChatModal from "../modals/GroupChat";
 
@@ -34,6 +34,10 @@ const MyChats = ({ fetchAgain }) => {
     }
   };
 
+  const getSenderImage = (senders) => {
+    return getFullSenderData(user, senders).picture;
+  };
+
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
@@ -56,16 +60,17 @@ const MyChats = ({ fetchAgain }) => {
         w="100%"
         alignItems={"center"}
         justifyContent="space-around"
-        p={2}
+        p={4}
       >
-        My Chats
+        Chats
         <GroupChatModal>
           <Button
             d="flex"
-            fontSize={{ base: "17px", md: "10px", lg: "14px" }}
+            fontSize={{ base: "17px", md: "10px", lg: "15px" }}
             rightIcon={<AddIcon />}
+            fontWeight="normal"
           >
-            New Group Chat
+            Group
           </Button>
         </GroupChatModal>
       </Box>
@@ -75,7 +80,6 @@ const MyChats = ({ fetchAgain }) => {
         w="100%"
         overflowY={"hidden"}
         bg="#F8F8F8"
-        borderRadius="lg"
       >
         {allChats ? (
           <Stack overflowY={"scroll"}>
@@ -85,9 +89,17 @@ const MyChats = ({ fetchAgain }) => {
                   onClick={() => setSelectedChat(item)}
                   cursor="pointer"
                   key={item._id}
-                  bg={selectedChat === item ? "#38B2AC" : "#E8E8E8"}
+                  bg={selectedChat === item ? "#02c268" : "#E8E8E8"}
                   color={selectedChat === item ? "white" : "black"}
+                  p={3}
+                  display="flex"
+                  alignItems={"center"}
                 >
+                  <Avatar
+                    src={getSenderImage(item.users)}
+                    name={getSender(loggedUser, item.users)}
+                    marginRight={"1em"}
+                  />
                   <Text>
                     {!item.isGroupChat
                       ? getSender(loggedUser, item.users)

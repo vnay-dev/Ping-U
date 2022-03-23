@@ -118,12 +118,10 @@ const SideDrawer = () => {
   return (
     <>
       <Box
-        bg={"white"}
+        bg={"#dedede"}
         display="flex"
         justifyContent={"space-between"}
         p={3}
-        margin={"0.5em"}
-        borderRadius={"5"}
         alignItems="center"
       >
         <Tooltip label="Search users to chat" hasArrow placement="bottom-end">
@@ -132,12 +130,13 @@ const SideDrawer = () => {
             display="flex"
             justifyContent={"space-between"}
             onClick={onOpen}
+            style={{border:" 1px solid #c2c2c2"}}
           >
             <i className="fa-solid fa-magnifying-glass"></i>
             <Text d={{ base: "none", md: "flex" }}>Search User</Text>
           </Button>
         </Tooltip>
-        <Text fontSize={"2xl"} fontFamily="Work sans">
+        <Text fontSize={"3xl"} fontFamily="Work sans">
           Ping-U
         </Text>
         <div>
@@ -147,7 +146,7 @@ const SideDrawer = () => {
                 count={notifications.length}
                 effect={Effect.SCALE}
               />
-              <BellIcon fontSize={"2xl"} marginX={5} />
+              <BellIcon fontSize={"2xl"} marginX={1} />
             </MenuButton>
             <MenuList>
               {!notifications.length && "No new messages"}
@@ -167,12 +166,13 @@ const SideDrawer = () => {
             </MenuList>
           </Menu>
           <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+            <MenuButton as={Button} bg="transparent" rightIcon={<ChevronDownIcon />}>
               <Avatar
                 name={user.name}
                 src={user.picture}
                 cursor="pointer"
                 size={"sm"}
+                style={{border:" 1px solid grey"}}
               />
             </MenuButton>
             <MenuList>
