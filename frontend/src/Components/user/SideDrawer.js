@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -115,6 +115,64 @@ const SideDrawer = () => {
     }
   };
 
+  // const addNewNotification = async (newMessage) => {
+  //   try {
+  //     const config = {
+  //       headers: {
+  //         "Content-type": "application/json",
+  //         Authorization: `Bearer ${user.token}`,
+  //       },
+  //     };
+  //     await axios.post(
+  //       "/users/notification",
+  //       {
+  //         newMessage: newMessage,
+  //       },
+  //       config
+  //     );
+  //   } catch (error) {
+  //     toast({
+  //       status: "warning",
+  //       duration: 5000,
+  //       isClosable: true,
+  //       position: "bottom",
+  //       title: "Failed to send notification",
+  //     });
+  //   }
+  // };
+
+  // const deleteNotifications = async (newMessage) => {
+  //   try {
+  //     const config = {
+  //       headers: {
+  //         "Content-type": "application/json",
+  //         Authorization: `Bearer ${user.token}`,
+  //       },
+  //     };
+  //     await axios.post(
+  //       "/users/remove/notification",
+  //       {
+  //         newMessage: newMessage,
+  //       },
+  //       config
+  //     );
+  //   } catch (error) {
+  //     toast({
+  //       status: "warning",
+  //       duration: 5000,
+  //       isClosable: true,
+  //       position: "bottom",
+  //       title: "Failed to send notification",
+  //     });
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (notifications.length) {
+  //     addNewNotification(notifications[0]);
+  //   }
+  // }, [notifications.length]);
+
   return (
     <>
       <Box
@@ -130,7 +188,7 @@ const SideDrawer = () => {
             display="flex"
             justifyContent={"space-between"}
             onClick={onOpen}
-            style={{border:" 1px solid #c2c2c2"}}
+            style={{ border: " 1px solid #c2c2c2" }}
           >
             <i className="fa-solid fa-magnifying-glass"></i>
             <Text d={{ base: "none", md: "flex" }}>Search User</Text>
@@ -156,6 +214,7 @@ const SideDrawer = () => {
                   onClick={() => {
                     setSelectedChat(item.chats);
                     setNotifications(notifications.filter((x) => x !== item));
+                    //deleteNotifications(item);
                   }}
                 >
                   {item.chats.isGroupChat
@@ -166,13 +225,17 @@ const SideDrawer = () => {
             </MenuList>
           </Menu>
           <Menu>
-            <MenuButton as={Button} bg="transparent" rightIcon={<ChevronDownIcon />}>
+            <MenuButton
+              as={Button}
+              bg="transparent"
+              rightIcon={<ChevronDownIcon />}
+            >
               <Avatar
                 name={user.name}
                 src={user.picture}
                 cursor="pointer"
                 size={"sm"}
-                style={{border:" 1px solid grey"}}
+                style={{ border: " 1px solid grey" }}
               />
             </MenuButton>
             <MenuList>

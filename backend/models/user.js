@@ -20,6 +20,12 @@ const userModel = mongoose.Schema(
       type: String,
       required: true,
     },
+    notifications: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "messages",
+      },
+    ],
   },
   {
     timestamps: true,

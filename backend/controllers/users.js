@@ -1,4 +1,5 @@
 const asyncHandler = require("express-async-handler");
+const Message = require("../models/message");
 const Users = require("../models/user");
 const generateToken = require("./generateToken");
 
@@ -76,4 +77,48 @@ const fetchUsers = asyncHandler(async (req, res) => {
   res.send(allUsers);
 });
 
-module.exports = { signupRoute, loginRoute, fetchUsers };
+// const addNotification = asyncHandler(async (req, res) => {
+//   const newMessageRecieved = req.body.newMessage;
+//   if (!newMessageRecieved) {
+//     console.log("New message not found in request");
+//     return res.sendStatus(400);
+//   }
+
+//   const addNewNotification = await Users.findByIdAndUpdate(req.user._id, {
+//     $push: { notifications: newMessageRecieved },
+//   }).exec();
+
+//   if (!addNewNotification) {
+//     res.status(404);
+//     throw new Error("Notification not added");
+//   } else {
+//     res.json(addNewNotification);
+//   }
+// });
+
+// const deleteNotification = asyncHandler(async (req, res) => {
+//   const newMessageRecieved = req.body.newMessage;
+//   if (!newMessageRecieved) {
+//     console.log("New message not found in request");
+//     return res.sendStatus(400);
+//   }
+
+//   const removeNotification = await Users.findByIdAndUpdate(req.user._id, {
+//     $pull: { notifications: newMessageRecieved._id },
+//   }).exec();
+
+//   if (!removeNotification) {
+//     res.status(404);
+//     throw new Error("Notification not removed");
+//   } else {
+//     res.json(removeNotification);
+//   }
+// });
+
+module.exports = {
+  signupRoute,
+  loginRoute,
+  fetchUsers,
+  // addNotification,
+  // deleteNotification,
+};
